@@ -1,7 +1,7 @@
 import { type CookieOptions, createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export async function supbaseServerClient() {
+export async function createSupabaseServerClient() {
   const cookieStore = cookies();
 
   const supabase = createServerClient(
@@ -23,6 +23,5 @@ export async function supbaseServerClient() {
   );
 
   // TODO : 로그인하지 않은 경우 라우팅 처리
-
   return supabase;
 }
