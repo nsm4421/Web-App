@@ -4,12 +4,33 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { supabaseBrowserClient } from "@/supabase/supabseClient";
 import { Provider } from "@supabase/supabase-js";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { RxGithubLogo } from "react-icons/rx";
+import { toast } from "sonner";
 
 export default function OAuthButtons() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+
+  // 현재 인증상태 검사
+  // 로그인한 경우, 홈 화면으로 리다이렉션
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const {
+        data: { user },
+      } = await supabaseBrowserClient.auth.getUser();
+      if (user) {
+        toast.info("already logined!");
+        return router.push("/");
+      } else {
+        setIsMounted(true);
+      }
+    };
+    fetchCurrentUser();
+  }, []);
 
   const handleSignIn = (provider: Provider) => async () => {
     try {
@@ -25,6 +46,10 @@ export default function OAuthButtons() {
       setIsLoading(false);
     }
   };
+
+  if (!isMounted) {
+    return <></>;
+  }
 
   return (
     <ul className="flex flex-col gap-4">

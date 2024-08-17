@@ -8,7 +8,7 @@ export default async function middlreware(request: NextRequest) {
     },
   });
 
-  const supabase = createServerClient(
+  const supabase = await createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -32,20 +32,15 @@ export default async function middlreware(request: NextRequest) {
     }
   );
 
-  // TODO : 로그인하지 않은 경우 라우팅 처리
-  //   const {
-  //     data: { user },
-  //   } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  //   if (
-  //     !user &&
-  //     !request.nextUrl.pathname.startsWith("/login") &&
-  //     !request.nextUrl.pathname.startsWith("/auth")
-  //   ) {
-  //     const url = request.nextUrl.clone();
-  //     url.pathname = "/login";
-  //     return NextResponse.redirect(url);
-  //   }
+  if (!user && !request.nextUrl.pathname.startsWith("/auth")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth";
+    return NextResponse.redirect(url);
+  }
 
   return supabaseResponse;
 }
