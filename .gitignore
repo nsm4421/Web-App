@@ -2,6 +2,7 @@ yarn.lock
 bun.lockb
 DS_Store
 src/components/ui/
+.env
 
 # dependencies
 /node_modules
