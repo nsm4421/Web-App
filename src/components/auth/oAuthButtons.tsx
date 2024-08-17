@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
-import { supabaseBrowserClient } from "@/supabase/supabseClient";
+import { supabaseBrowserClient } from "@/lib/supabase/supabseClient";
 import { Provider } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

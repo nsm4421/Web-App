@@ -74,3 +74,11 @@ execute procedure public.insert_new_user();
 https://supabase.com/docs/guides/auth/server-side/creating-a-client
 
 `bun install @supabase/ssr @supabase/supabase-js`
+
+https://supabase.com/docs/guides/api/rest/generating-types
+
+`bun i supabase@">=1.8.1" --save-dev`
+
+`bunx supabse login`
+
+`bunx supabase gen types --lang=typescript --project-id "qdzzkstwzbhzunjstpvk" --schema public > src/lib/supabase/supabase.types.ts`
