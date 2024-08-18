@@ -16,6 +16,7 @@ export default async function getUserData(): Promise<UserModel | null> {
       .from("users")
       .select("*")
       .eq("id", user.id)
+      .order('id')  // limit을 사용하기 위해서는 order를 지정해주어야 함
       .limit(1);
     if (error) {
       throw error;
