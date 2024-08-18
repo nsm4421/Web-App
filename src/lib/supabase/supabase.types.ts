@@ -15,30 +15,36 @@ export type Database = {
           country: string | null
           created_at: string | null
           email: string
+          groups: string[] | null
           id: string
           name: string | null
           phone: string | null
           role: string | null
+          status: string | null
         }
         Insert: {
           avatar_url: string
           country?: string | null
           created_at?: string | null
           email: string
+          groups?: string[] | null
           id: string
           name?: string | null
           phone?: string | null
           role?: string | null
+          status?: string | null
         }
         Update: {
           avatar_url?: string
           country?: string | null
           created_at?: string | null
           email?: string
+          groups?: string[] | null
           id?: string
           name?: string | null
           phone?: string | null
           role?: string | null
+          status?: string | null
         }
         Relationships: [
           {

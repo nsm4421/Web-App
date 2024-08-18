@@ -15,7 +15,11 @@ role text default 'user' check(
 avatar_url text not null,
 created_at timestamp default current_timestamp,
 phone text,
-country text
+country text,
+groups text[],
+status text default 'onBoarding' check(
+  status in ('onBoarding', 'active', 'deactivated', 'blocked')
+)
 );
 
 -- Enable Row Level Security
