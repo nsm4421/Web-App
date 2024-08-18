@@ -40,11 +40,7 @@ export default function OnBoardingForm({ user }: Props) {
       setCountry(c);
     };
 
-  const handleClickImage = () => {
-    if (ref.current) {
-      ref.current.click();
-    }
-  };
+  const handleClickImage = () => ref?.current?.click()
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -69,12 +65,11 @@ export default function OnBoardingForm({ user }: Props) {
         const blob = await fetch(user.avatar_url).then(res=>res.blob());
         setProfileImage(new File([blob], 'profile-image', { type: blob.type}));
       }
-      const saved = await OnBoardingAction({
+      await OnBoardingAction({
         name,
         profileImage:profileImage!,
         country,
       });
-      // TODO : 유저저보 업데이트
       router.push("/");
     } catch (error) {
       toast.error("on boarding request failed");
