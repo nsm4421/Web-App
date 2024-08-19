@@ -11,7 +11,8 @@ export default function FirstStepOfCreateGroup() {
   const maxLength = 30;
   const { name, updateState, setCurrentStep } = useCreateGroupState();
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    updateState({ name: e.target.value });
+    const text = e.target.value;
+    updateState({ name: text.slice(0, maxLength) });
   };
   const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -29,22 +30,28 @@ export default function FirstStepOfCreateGroup() {
     <section>
       <Typography text="What is the name of group?" className="my-6" />
 
-      <form className="flex gap-x-3">
-        <Input
-          className="border-none shadow-sm bg-slate-200"
-          placeholder={`naming group name with characters between ${minLength}~${maxLength}`}
-          value={name}
-          onChange={handleChangeName}
-        />
-        <Button
-          disabled={name.length < minLength}
-          variant="secondary"
-          className=" bg-teal-800 dark:bg-teal-500 text-white hover:text-slate-800 w-fit rounded-xl"
-          onClick={handleNext}
-        >
-          NEXT
-        </Button>
-      </form>
+      <div className="flex flex-col gap-y-2 mt-3">
+        <div className="flex gap-x-3">
+          <Input
+            className="border-none shadow-sm bg-slate-200"
+            value={name}
+            onChange={handleChangeName}
+          />
+
+          <Button
+            disabled={name.length < minLength}
+            variant="secondary"
+            className=" bg-teal-800 dark:bg-teal-500 text-white hover:text-slate-800 w-fit rounded-xl"
+            onClick={handleNext}
+          >
+            NEXT
+          </Button>
+        </div>
+
+        <label className="text-sm text-slate-500">
+          naming group name with characters between {minLength}~{maxLength}
+        </label>
+      </div>
     </section>
   );
 }

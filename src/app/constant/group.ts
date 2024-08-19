@@ -1,3 +1,3 @@
 export enum CreateGroupStep {
-    STEP1 = "name", STEP2 = "thumbnail", STEP3 = "submit"
+    STEP1 = "name", STEP2 = "thumbnail", STEP3 = "detail", STEP4="submit"
 }
