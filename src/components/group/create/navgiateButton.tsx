@@ -2,14 +2,19 @@ import { CreateGroupStep } from "@/app/constant/group";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useCreateGroupState } from "@/hooks/useCreateGroupState";
+import { cn } from "@/lib/utils";
 
 interface Props {
+  beforeDisabled?: boolean;
+  nextDisabled?: boolean;
   withDivider?: boolean;
   beforeStep?: CreateGroupStep;
   nextStep?: CreateGroupStep;
 }
 
 export default function NavigateButton({
+  beforeDisabled,
+  nextDisabled,
   withDivider,
   beforeStep,
   nextStep,
@@ -37,12 +42,26 @@ export default function NavigateButton({
       {/* Navigator Button */}
       <div className="flex justify-between gap-x-2">
         {beforeStep && (
-          <Button onClick={handleBack} className="w-full rounded-xl font-thin">
+          <Button
+            disabled={beforeDisabled}
+            onClick={handleBack}
+            className={cn(
+              "w-full rounded-xl font-thin",
+              beforeDisabled ? "cursor-progress" : "cursor-pointer"
+            )}
+          >
             <Typography variant="p" text="Back" />
           </Button>
         )}
         {nextStep && (
-          <Button onClick={handleNext} className="w-full rounded-xl font-thin">
+          <Button
+            disabled={nextDisabled}
+            onClick={handleNext}
+            className={cn(
+              "w-full rounded-xl font-thin",
+              nextDisabled ? "cursor-progress" : "cursor-pointer"
+            )}
+          >
             <Typography variant="p" text="Next" />
           </Button>
         )}

@@ -1,18 +1,15 @@
 import { supabaseBrowserClient } from "@/lib/supabase/supabseClient";
 
 interface Props {
-  name: string;
-  profileImage: File;
-  country: string;
+  groupId: string;
+  thumbnail: File;
 }
 
-export default async function OnBoardingAction({
-  name,
-  profileImage,
-  country,
+export default async function UploadGroupThumbnailAction({
+  groupId,
+  thumbnail,
 }: Props) {
   try {
-    // 현재 로그인한 유저 정보 가져오기
     const {
       data: { user },
     } = await supabaseBrowserClient.auth.getUser();
@@ -20,11 +17,11 @@ export default async function OnBoardingAction({
       throw Error("user is not logined");
     }
     // 프로필 사진 저장하기
-    const storageName = "avatar";
+    const storageName = "thumbnail";
     const { data: storageData, error: storageError } =
       await supabaseBrowserClient.storage
         .from(storageName)
-        .upload(user.id, profileImage, {
+        .upload(groupId, thumbnail, {
           cacheControl: "3600",
           upsert: true,
           contentType: "image/jpeg",
@@ -32,29 +29,14 @@ export default async function OnBoardingAction({
     if (storageError) {
       throw storageError;
     }
-
-    // Public URL 가져오기
+    
     const {
       data: { publicUrl },
     } = supabaseBrowserClient.storage
       .from(storageName)
       .getPublicUrl(storageData.path);
 
-    // 유저 정보 DB에 저장하기
-
-    const { error: DBError } = await supabaseBrowserClient
-      .from("users")
-      .update({
-        name,
-        avatar_url: publicUrl,
-        country,
-        status: "active",
-      })
-      .eq("id", user.id);
-
-    if (DBError) {
-      throw DBError;
-    }
+    return publicUrl;
   } catch (error) {
     console.error(error);
   }

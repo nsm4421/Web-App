@@ -1,33 +1,51 @@
 "use client";
 
 import { CreateGroupStep } from "@/app/constant/group";
-import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useCreateGroupState } from "@/hooks/useCreateGroupState";
-
-import { useRef } from "react";
 import NavigateButton from "./navgiateButton";
+import { ImCancelCircle, ImInstagram } from "react-icons/im";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import UploadGroupThumbnailAction from "@/action/uploadGroupThumbnail";
+import { toast } from "sonner";
 
 export default function SecondStepOfCreateGroup() {
-  const { thumbnail } = useCreateGroupState();
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const ref = useRef<HTMLInputElement>(null);
-  const { updateState } = useCreateGroupState();
+  const { groupId, thumbnailUrl, updateState } = useCreateGroupState();
+
+  const handleUnSelect = () => {
+    updateState({ thumbnailUrl: undefined });
+  };
 
   const handleClickSelectImageButton = () => ref?.current?.click();
 
-  const handleSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const files = e.target.files;
-    if (!files) {
-      return;
-    }
-    const selected = files[0];
-    if (selected) {
-      updateState({
-        thumbnailFile: selected,
-        thumbnail: URL.createObjectURL(selected),
+  const handleSelectImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setIsLoading(true);
+      e.preventDefault();
+      const files = e.target.files;
+      if (!files || !files[0]) {
+        return;
+      }
+      await UploadGroupThumbnailAction({ groupId, thumbnail: files[0] })
+        .then((res) => {
+          updateState({ thumbnailUrl: res });
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("uploading image failed", {
+            position: "top-center",
+          });
+        });
+    } catch (error) {
+      console.error(error);
+      toast.error("uploading image failed", {
+        position: "top-center",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,7 +57,7 @@ export default function SecondStepOfCreateGroup() {
         <Typography
           variant="p"
           text={
-            thumbnail
+            thumbnailUrl
               ? "Image Selected"
               : "Select picture represent your gruoup"
           }
@@ -47,38 +65,48 @@ export default function SecondStepOfCreateGroup() {
         />
       </div>
 
-      <div className="flex flex-col gap-y-3">
-        {thumbnail ? (
-          <div>
-            <div className="flex justify-center gap-y-4">
-              <button onClick={handleClickSelectImageButton}>
-                <img
-                  className="w-[100px] h-[100px] rounded-full object-cover"
-                  src={thumbnail}
-                />
-              </button>
+      {!isLoading && thumbnailUrl && (
+        <div className="flex items-center justify-center h-32 w-32 relative">
+          <Image
+            className="object-cover w-full h-full rounded-full"
+            src={thumbnailUrl}
+            alt={"thumbnail"}
+            width={300}
+            height={300}
+          />
+          <ImCancelCircle
+            onClick={handleUnSelect}
+            className="absolute cursor-pointer -right-2 -top-2 z-10 hover:scale-110"
+          />
+        </div>
+      )}
+
+      {!thumbnailUrl && (
+        <button
+          onClick={handleClickSelectImageButton}
+          className="mt-5 flex justify-center items-center w-full h-32 bg-slate-600 text-white rounded-xl"
+        >
+          {isLoading ? (
+            <Typography text="Uploading..." variant="h5" />
+          ) : (
+            <div className="flex items-center gap-x-3">
+              <ImInstagram className="w-15 h-15" />
+              <Typography variant="h6" text="PICTURE" />
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-y-3">
-            <Button
-              onClick={handleClickSelectImageButton}
-              className="w-full rounded-xl font-semibold bg-sky-800 text-white hover:text-slate-800"
-            >
-              <Typography variant="p" text="Select Thumbnail" />
-            </Button>
-          </div>
-        )}
-      </div>
+          )}
+        </button>
+      )}
 
       <input
-        ref={ref}
-        type="file"
-        className="hidden"
         onChange={handleSelectImage}
+        type="file"
+        ref={ref}
+        className="hidden"
       />
 
       <NavigateButton
+        beforeDisabled={isLoading}
+        nextDisabled={!thumbnailUrl}
         withDivider
         beforeStep={CreateGroupStep.STEP1}
         nextStep={CreateGroupStep.STEP3}
