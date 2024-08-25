@@ -9,6 +9,9 @@ const inter = Lato({
   weight: ["100", "300", "400", "700", "900"],
 });
 
+// 매 요청마다 validation 실행
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Karma",
   description: "My Web App",
