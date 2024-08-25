@@ -8,6 +8,7 @@ import SecondStepOfCreateGroup from "./secondStepOfCreateGroup";
 import ThirdSteopOfCreateGroup from "./thirdStepOfCreateGroup";
 import Typography from "@/components/ui/typography";
 import { useEffect } from "react";
+import LastStepOfCreateGroup from "./lastStepOfCreateGroup";
 
 interface Props {
   groupId: string;
@@ -28,6 +29,6 @@ export default function CreateGroupForm({ groupId }: Props) {
     case CreateGroupStep.STEP3:
       return <ThirdSteopOfCreateGroup />;
     default:
-      return <Typography text="ERROR" />;
+      return <LastStepOfCreateGroup/>
   }
 }

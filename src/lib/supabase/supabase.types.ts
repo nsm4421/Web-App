@@ -9,6 +9,50 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      groups: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          hashtags: string[]
+          host: string
+          id: string
+          introduce: string | null
+          members: string[]
+          name: string
+          thumbnail_url: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string
+          hashtags: string[]
+          host?: string
+          id?: string
+          introduce?: string | null
+          members: string[]
+          name: string
+          thumbnail_url: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          hashtags?: string[]
+          host?: string
+          id?: string
+          introduce?: string | null
+          members?: string[]
+          name?: string
+          thumbnail_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "groups_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           avatar_url: string
@@ -61,7 +105,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      add_group: {
+        Args: {
+          uid: string
+          groupid: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

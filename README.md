@@ -71,6 +71,19 @@ after insert on auth.users
 for each row
 execute procedure public.insert_new_user();
 
+# RPC
+
+> Add Group
+
+create or replace function add_group(uid uuid, groupId text)
+returns void as $$
+  begin 
+    update public."users" 
+    set groups = groups || array[groupId]
+  where id = uid;
+  end;
+$$ language plpgsql;
+
 # Docs
 
 > Supabase
