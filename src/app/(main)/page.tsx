@@ -2,8 +2,8 @@ import getUserData from "@/action/getUserData";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
-  const user = await getUserData();
-  if (!user) {
+  const { data: user, error } = await getUserData();
+  if (error || !user) {
     return redirect("/auth");
   } else if (user.status === "onBoarding") {
     return redirect("/on-boarding");

@@ -29,16 +29,18 @@ export default function SecondStepOfCreateGroup() {
       if (!files || !files[0]) {
         return;
       }
-      await UploadGroupThumbnailAction({ groupId, thumbnail: files[0] })
-        .then((res) => {
-          updateState({ thumbnailUrl: res });
-        })
-        .catch((error) => {
-          console.error(error);
+      await UploadGroupThumbnailAction({
+        groupId,
+        thumbnail: files[0],
+      }).then((res) => {
+        if (res.error || !res.data) {
           toast.error("uploading image failed", {
             position: "top-center",
           });
-        });
+        } else {
+          updateState({ thumbnailUrl: res.data });
+        }
+      });
     } catch (error) {
       console.error(error);
       toast.error("uploading image failed", {
