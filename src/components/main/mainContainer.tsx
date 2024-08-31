@@ -16,9 +16,10 @@ export default function MainContainer({ children }: { children: ReactNode }) {
     >
       <div
         className={cn(
-          "lg:ml-[420px] md:ml-[280px] md:h-full overflow-y-hidden rounded-l-2xl pl-3 pt-3",
-          "[&::-webkit-scrollbar-track]:w-2",
-          theme === "dark" ? "bg-slate-800" : "bg-neutral-100"
+          "md:ml-[280px] lg:ml-[420px] md:h-full overflow-y-hidden",
+          theme === "dark"
+            ? "bg-slate-800 text-neutral-50"
+            : "bg-neutral-100 text-neutral-900"
         )}
       >
         {children}

@@ -9,10 +9,8 @@ export default async function Home() {
     return redirect("/on-boarding");
   } else if (!user.groups || user.groups.length === 0) {
     return redirect("/group/create");
+  } else {
+    const groupId = user.groups[0];
+    return redirect(`/group/${groupId}`);
   }
-  return (
-    <main>
-      <h1>Home</h1>
-    </main>
-  );
 }

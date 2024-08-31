@@ -1,4 +1,3 @@
-import MainContainer from "@/components/main/mainContainer";
 import { ThemeProvider } from "next-themes";
 import { ReactNode } from "react";
 
@@ -10,7 +9,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <MainContainer>{children}</MainContainer>
+      {children}
     </ThemeProvider>
   );
 }
